@@ -16,5 +16,46 @@ body {
   /*
    * CSS image reference example.
    */
+  text-align: center;
   background-image: url('./images/bg-pattern.png');
+}
+.search-form {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 30px;
+}
+.gallery {
+  /* text-align: center; */
+  margin: 0;
+  padding: 0;
+  margin-right: auto;
+  margin-left: auto;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  width: 1320px;
+}
+.photo-card {
+  margin: 0;
+  /* position: relative; */
+  /* height: 600px; */
+}
+.photo-card:not(:nth-child(4n)) {
+  margin-right: 30px;
+}
+.photo-card__img {
+  width: 260px;
+  height: 160px;
+}
+.loadMore--notShown {
+  display: none;
+}
+.stats {
+  display: flex;
+  justify-content: space-between;
+}
+.stats-item {
+  display: flex;
 }
