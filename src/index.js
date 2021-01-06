@@ -9,7 +9,7 @@ import debounce from "lodash.debounce";
 import LoadMoreBtn from "./loadMorebtn";
 import * as basicLightbox from 'basiclightbox';
 import modalTmp from "./modalTmp.hbs";
-
+import "../node_modules/basiclightbox/dist/basicLightbox.min.css"
 
 const pixabayApiService = new PixabayApiService();
 const loadMoreBtn = new LoadMoreBtn();
@@ -17,7 +17,9 @@ const loadMoreBtn = new LoadMoreBtn();
 refs.inputRef.addEventListener('input', (debounce((e => handleInput(e)), 500)));
 loadMoreBtn.btnRef.addEventListener('click', fetchImages);
 
-
+openModal()
+pixabayApiService.query = "cat"
+fetchImages()
 function handleInput(e) {
     e.preventDefault()
 
@@ -50,66 +52,77 @@ function createImagesMarkup(images) {
 function clearPage() {
         refs.galleryRef.innerHTML = "";
 }
-function openModal() {   
-refs.galleryRef.onclick = (e) => {
-	basicLightbox.create(`<img width="1400" height="900" src="${e.target.dataset.source}">`).show()
-}
-}
-   openModal()
-// function handleInput(e) {
-//     e.preventDefault()
-//     const searchValue = e.target.value
-//     if (searchValue === "") {
-//         clearPage()
-//         refs.loadMore.classList.add("loadMore--notShown");
-//         return
-//     }
-   
-//     clearPage()
-//     let page = 1
-//    console.log(page)
-//     renderImg(searchValue)
-    
-//     refs.loadMore.addEventListener("click", (e) => {
-        
-//         console.log(page)
-//         showMoreImages(e, searchValue, page)
-//     })
 
-//     function showMoreImages(e, searchValue, page) {
-//         e.preventDefault()
-        
-        
-//         console.log(page)
-//         // refs.loadMore.disabled = true;
-//         renderImg(searchValue, page)
-//         // return page;
-//     }
-// // .then(refs.loadMore.disabled = false)
-//     function renderImg(searchValue, page = 1) {
-//         console.log(page)
-//         const position = (page - 1) * 670;
-//         // refs.loadMore.disabled = true;
-        
-//       getImages(searchValue, page)
-//             .then(obj => refs.galleryRef.insertAdjacentHTML('beforeend', imgTemplate(obj.hits)))
-//           .then(function () {
-//               page += 1;
-//               console.log(page);
-//                 refs.loadMore.classList.remove("loadMore--notShown");
-//                 window.scrollTo({
-//                     top: position,
-//                     behavior: "smooth"
-//                 })
-// //                 document.querySelector(".photo_link").addEventListener('click', function () {
-// //                     const instance = basicLightbox.create(`
-// // 	<img src=""></img>
-// // `)
-// //                 })
-//                 // refs.photoRef.addEventListener('click', console.log("Hey"))
-//             })
-        
-//     }
+// const optionScroll = {
+// position: body.scrollTop
 // }
+function openModal() {
+    refs.galleryRef.addEventListener('click', (e) => {
+     let scrollTop = window.pageYOffset ;
+        basicLightbox.create(`<img width="1400" height="900" src="${e.target.dataset.source}">`,
+            {
+                onClose: () => {
+                    window.scrollTo({
+                   top: scrollTop
+        })
+        }  
+        }).show();
+       }
+    )
+}
+    // function handleInput(e) {
+    //     e.preventDefault()
+    //     const searchValue = e.target.value
+    //     if (searchValue === "") {
+    //         clearPage()
+    //         refs.loadMore.classList.add("loadMore--notShown");
+    //         return
+    //     }
+   
+    //     clearPage()
+    //     let page = 1
+    //    console.log(page)
+    //     renderImg(searchValue)
+    
+    //     refs.loadMore.addEventListener("click", (e) => {
+        
+    //         console.log(page)
+    //         showMoreImages(e, searchValue, page)
+    //     })
 
- 
+    //     function showMoreImages(e, searchValue, page) {
+    //         e.preventDefault()
+        
+        
+    //         console.log(page)
+    //         // refs.loadMore.disabled = true;
+    //         renderImg(searchValue, page)
+    //         // return page;
+    //     }
+    // // .then(refs.loadMore.disabled = false)
+    //     function renderImg(searchValue, page = 1) {
+    //         console.log(page)
+    //         const position = (page - 1) * 670;
+    //         // refs.loadMore.disabled = true;
+        
+    //       getImages(searchValue, page)
+    //             .then(obj => refs.galleryRef.insertAdjacentHTML('beforeend', imgTemplate(obj.hits)))
+    //           .then(function () {
+    //               page += 1;
+    //               console.log(page);
+    //                 refs.loadMore.classList.remove("loadMore--notShown");
+    //                 window.scrollTo({
+    //                     top: position,
+    //                     behavior: "smooth"
+    //                 })
+    // //                 document.querySelector(".photo_link").addEventListener('click', function () {
+    // //                     const instance = basicLightbox.create(`
+    // // 	<img src=""></img>
+    // // `)
+    // //                 })
+    //                 // refs.photoRef.addEventListener('click', console.log("Hey"))
+    //             })
+        
+    //     }
+    // }
+

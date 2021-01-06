@@ -3,19 +3,18 @@ const API_KEY = "11025352-e441425a1749dc1227f4601c8";
 const BASE_URL = 'https://pixabay.com/api';
 
 export default class PixabayApiService {
-    constructo() {
+    constructor() {
         this.searchQuary = "";
         this.page = 1;
+        this.position = 0;
     }
 
-    fetchImages() {
+    async fetchImages() {
         const url = `${BASE_URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuary}&page=${this.page}&per_page=12&key=${API_KEY}`
-        return fetch(url)
-            .then(response => response.json())
-            .then(({hits}) => {
-                this.incrementPage()
-                return hits
-            })
+        const response = await fetch(url);
+        const { hits } = await response.json();
+        this.incrementPage();
+        return hits;
     }
 
     incrementPage() {
@@ -31,8 +30,9 @@ export default class PixabayApiService {
     }
 
     scrollTo() {
-    window.scrollTo({
-        top: (this.page-1) * 670,
+        window.scrollTo({
+        //  top: this.position,
+        top: (this.page-1) * 500,
         behavior: "smooth"
     })
     }
