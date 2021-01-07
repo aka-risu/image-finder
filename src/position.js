@@ -2,7 +2,7 @@ const position = {
     currentPosition: 0,
     scrollToBottom() {
         window.scrollTo({
-        top: (this.page-1) * 500,
+        top: this.currentPosition + 800,
         behavior: "smooth"
     })
     },
@@ -12,22 +12,18 @@ const position = {
         top: this.currentPosition,
     })
     },
-    
-    set currentPosition(value) {
-    this.currentPosition = value
+    setCurrentPosition() {
+        this.currentPosition = window.pageYOffset;
     },
-    
-    get currentPosition() {
-    return this.currentPosition
-    },
-}
 
-function scrollTo() {
-        window.scrollTo({
-        //  top: this.position,
-        top: (this.page-1) * 500,
-        behavior: "smooth"
-    })
 }
+export default position
+// function scrollTo() {
+//         window.scrollTo({
+//         //  top: this.position,
+//         top: (this.page-1) * 500,
+//         behavior: "smooth"
+//     })
+// }
     
-let scrollTop = window.pageYOffset ;
+// let scrollTop = window.pageYOffset ;

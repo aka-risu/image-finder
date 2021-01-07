@@ -10,16 +10,18 @@ import LoadMoreBtn from "./loadMorebtn";
 import * as basicLightbox from 'basiclightbox';
 import modalTmp from "./modalTmp.hbs";
 import "../node_modules/basiclightbox/dist/basicLightbox.min.css"
+import position from "./position"
 
 const pixabayApiService = new PixabayApiService();
 const loadMoreBtn = new LoadMoreBtn();
 
-refs.inputRef.addEventListener('input', (debounce((e => handleInput(e)), 500)));
+refs.inputRef.addEventListener('input', debounce(e => handleInput(e), 500));
 loadMoreBtn.btnRef.addEventListener('click', fetchImages);
 
 openModal()
-pixabayApiService.query = "cat"
-fetchImages()
+// pixabayApiService.query = "cat"
+// fetchImages()
+
 function handleInput(e) {
     e.preventDefault()
 
@@ -28,9 +30,12 @@ function handleInput(e) {
     if (e.target.value === "") {
         loadMoreBtn.hide();
         clearPage();
+        refs.galleryRef.classList.remove('not-found')
+        // refs.galleryRef.insertAdjacentHTML("afterbegin", `<p class="no-result-text">No results :(</p>`)
         return;
     }
     pixabayApiService.resetPage()
+    refs.galleryRef.classList.remove('not-found')
     clearPage()
     fetchImages()
         
@@ -40,9 +45,18 @@ function handleInput(e) {
 
 function fetchImages() {
     loadMoreBtn.disable()
-  return pixabayApiService.fetchImages().then(images => {
+    return pixabayApiService.fetchImages().then(images => {
+        if (images.length === 0) {
+            loadMoreBtn.hide()
+             refs.galleryRef.classList.add('not-found')
+        refs.galleryRef.insertAdjacentHTML("afterbegin", `<p class="no-result-text">No results :(</p>`)
+return
+      }
+
       createImagesMarkup(images)
-      pixabayApiService.scrollTo()
+      
+      position.setCurrentPosition()
+      position.scrollToBottom()
       loadMoreBtn.enable()
       })
 }
@@ -53,20 +67,11 @@ function clearPage() {
         refs.galleryRef.innerHTML = "";
 }
 
-// const optionScroll = {
-// position: body.scrollTop
-// }
 function openModal() {
     refs.galleryRef.addEventListener('click', (e) => {
-     let scrollTop = window.pageYOffset ;
+     position.setCurrentPosition()
         basicLightbox.create(`<img width="1400" height="900" src="${e.target.dataset.source}">`,
-            {
-                onClose: () => {
-                    window.scrollTo({
-                   top: scrollTop
-        })
-        }  
-        }).show();
+            {onClose: () => position.scrollToCurrent()}).show();
        }
     )
 }

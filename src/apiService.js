@@ -29,11 +29,11 @@ export default class PixabayApiService {
         this.searchQuary = newQuery;
     }
 
-    scrollTo() {
-        window.scrollTo({
-        //  top: this.position,
-        top: (this.page-1) * 500,
-        behavior: "smooth"
-    })
-    }
+    // scrollTo() {
+    //     window.scrollTo({
+    //     //  top: this.position,
+    //     top: (this.page-1) * 500,
+    //     behavior: "smooth"
+    // })
+    // }
 }
