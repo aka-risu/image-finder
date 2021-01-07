@@ -10,23 +10,34 @@ import LoadMoreBtn from "./loadMorebtn";
 import * as basicLightbox from 'basiclightbox';
 import modalTmp from "./modalTmp.hbs";
 import "../node_modules/basiclightbox/dist/basicLightbox.min.css"
-import position from "./position"
+import position from "./position";
+import "../JavaScript-autoComplete-master/auto-complete.css"
+import '../JavaScript-autoComplete-master/auto-complete'
+import autoComplete from '../JavaScript-autoComplete-master/auto-complete';
 
 const pixabayApiService = new PixabayApiService();
 const loadMoreBtn = new LoadMoreBtn();
 
-refs.inputRef.addEventListener('input', debounce(e => handleInput(e), 500));
+// refs.inputRef.addEventListener('input', debounce(e => handleInput(e), 500));
 loadMoreBtn.btnRef.addEventListener('click', fetchImages);
+refs.searchForm.addEventListener('submit', handleInput);
+refs.galleryRef.addEventListener('click', openModal);
 
-openModal()
 // pixabayApiService.query = "cat"
 // fetchImages()
-
+// const autocomplete = new autoComplete({
+//     selector: refs.inputRef,
+//     minChars: 2,
+//     source: function(term, response){
+//         $.getJSON('https://pixabay.com/api/?q=&key=11025352-e441425a1749dc1227f4601c8', { q: term }, function(data){ response(data); });
+//     }
+// })
+// autocomplete()
 function handleInput(e) {
     e.preventDefault()
 
-    pixabayApiService.query = e.target.value
-
+    pixabayApiService.query = e.currentTarget.elements.query.value
+    pixabayApiService.typeOfImage = e.target.elements.typeOfImage.value
     if (e.target.value === "") {
         loadMoreBtn.hide();
         clearPage();
@@ -38,9 +49,7 @@ function handleInput(e) {
     refs.galleryRef.classList.remove('not-found')
     clearPage()
     fetchImages()
-        
-    loadMoreBtn.show()
-    
+       
 }
 
 function fetchImages() {
@@ -48,16 +57,16 @@ function fetchImages() {
     return pixabayApiService.fetchImages().then(images => {
         if (images.length === 0) {
             loadMoreBtn.hide()
-             refs.galleryRef.classList.add('not-found')
-        refs.galleryRef.insertAdjacentHTML("afterbegin", `<p class="no-result-text">No results :(</p>`)
-return
-      }
+            refs.galleryRef.classList.add('not-found')
+            refs.galleryRef.insertAdjacentHTML("afterbegin", `<p class="no-result-text">No results :(</p>`)
+            return
+            }
 
-      createImagesMarkup(images)
-      
-      position.setCurrentPosition()
-      position.scrollToBottom()
-      loadMoreBtn.enable()
+    createImagesMarkup(images)
+    position.setCurrentPosition()
+    position.scrollToBottom()
+    loadMoreBtn.show()
+    loadMoreBtn.enable()
       })
 }
 function createImagesMarkup(images) {
@@ -67,13 +76,9 @@ function clearPage() {
         refs.galleryRef.innerHTML = "";
 }
 
-function openModal() {
-    refs.galleryRef.addEventListener('click', (e) => {
-     position.setCurrentPosition()
-        basicLightbox.create(`<img width="1400" height="900" src="${e.target.dataset.source}">`,
-            {onClose: () => position.scrollToCurrent()}).show();
-       }
-    )
+function openModal(e) {
+    e.preventDefault()
+    return basicLightbox.create(`<img width="1400" height="900" src="${e.target.dataset.source}">`).show();
 }
     // function handleInput(e) {
     //     e.preventDefault()

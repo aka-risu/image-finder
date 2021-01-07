@@ -6,11 +6,11 @@ export default class PixabayApiService {
     constructor() {
         this.searchQuary = "";
         this.page = 1;
-        this.position = 0;
+       this.typeOfImage = "photo"
     }
 
     async fetchImages() {
-        const url = `${BASE_URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuary}&page=${this.page}&per_page=12&key=${API_KEY}`
+        const url = `${BASE_URL}/?image_type=${this.typeOfImage}&orientation=horizontal&q=${this.searchQuary}&page=${this.page}&per_page=12&key=${API_KEY}`
         const response = await fetch(url);
         const { hits } = await response.json();
         this.incrementPage();

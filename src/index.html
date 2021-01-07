@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <!-- <link href="dist/basicLightbox.min.css" rel="stylesheet" /> -->
+   <!-- <link rel="stylesheet" href="../JavaScript-autoComplete-master/auto-complete.css"> -->
     <title>Search</title>
   </head>
 
@@ -13,11 +14,15 @@
   <div class="search-form-wrapper">
     <form class="search-form" id="search-form">
     <input class="input" type="text" name="query" autocomplete="off" placeholder="Search images..." />
-  <!-- <button>search</button> -->
+  <button class="search-button" type="submit" >search</button>
+  <div class="type-image"><input type="radio" name="typeOfImage" value="photo" checked>Photo</input>
+  <input type="radio" name="typeOfImage" value="illustration">Illustration</input>
+  <input type="radio" name="typeOfImage" value="vector">Vector</input></div>
   </form>
 </div>
   <ul class="gallery">
   </ul>
   <button class="loadMore loadMore--notShown">Load more</button>
-  </body>
+  
+</body>
 </html>
